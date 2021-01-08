@@ -2,6 +2,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Programs {
@@ -15,13 +17,20 @@ public class Programs {
     }
 
     void getProces() {
+
         lists = Arrays.asList(string.split("\n"));
 
         List<Expenserecord> expense = lists.stream()  // расход
                 .filter(s -> s.startsWith("-"))//фильтруем
                 .map(s -> s.substring(1)) //убираем первый елемент
-                .map(parts -> new Expenserecord(parts.substring(4), Integer.parseInt(parts.substring(0, 3)))) //формируем объеты
+                .map(parts -> new Expenserecord(getStrin(parts), getIn(parts))) //формируем объеты
                 .collect(Collectors.toList());
+
+
+        //for (Expenserecord expenserecord : expense) {
+        // System.out.println("запись " + expenserecord.summ);
+        // }
+
 
         List<Incomerecord> income = lists.stream() // доход
                 .filter(s -> s.startsWith("+"))//фильтруем
@@ -77,6 +86,31 @@ public class Programs {
         }
 
 
+    }
+
+    private int getIn(String parseInt) {
+        Pattern pattern = Pattern.compile("([0-9]++)");
+        Matcher matcher = pattern.matcher(parseInt);
+        Integer number = 0;
+
+        while (matcher.find()) {
+            // System.out.println("выбрали число "+ matcher.group());
+            number = Integer.parseInt(matcher.group());
+        }
+        return number;
+    }
+
+
+    private String getStrin(String substring) {
+
+        Pattern pattern = Pattern.compile("[а-я ]++");
+        Matcher matcher = pattern.matcher(substring);
+        String name = "";
+
+        while (matcher.find()) {
+            name = (matcher.group());
+        }
+        return name;
     }
 
 
